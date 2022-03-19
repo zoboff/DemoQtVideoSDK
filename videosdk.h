@@ -19,13 +19,15 @@
 #define V_AUTH "auth"
 #define V_SECURED "secured"
 
-enum ConnectionStatus
+enum State
 {
-    unknown = 0,
-    started = 1,
-    connected = 2,
-    normal = 3,
-    close = 4,
+    none = 0,       // No connection to the server and TrueConf Room does nothing
+    connect = 1,    // Tries to connect to the server
+    login = 2,      // you need to login
+    normal = 3,     // Connected to the server and logged in
+    wait = 4,       // Pending: either it calls somebody or somebody calls it
+    conference = 5, // In the conference
+    close = 6       // Finishing the conference
 };
 
 class VideoSDK : public QObject
@@ -36,26 +38,34 @@ public:
 
 
 public:
-    explicit VideoSDK(const QString &host, QObject *parent);
+    explicit VideoSDK(QObject *parent);
+    ~VideoSDK();
+    void open(const QString &host, const QString &pin);
 
-    ConnectionStatus connectionStatus() const;
+    bool started() const;
 
 protected:
     void send(const QString &data);
     void auth();
 
 signals:
+    void opened();
+    void closed();
+    void error(QString text);
+    //void change_state(State state);
 
 private:
+    bool m_started = false;
     QString m_host;
-    QWebSocket* m_socket;
-    QByteArray m_data;
-    ConnectionStatus m_connectionStatus = ConnectionStatus::unknown;
+    QString m_pin;
+    QWebSocket* m_socket = nullptr;
 
-public slots:
-    void onConnected();
-    void onDisconnected();
+private slots:
+    void onSocketConnected();
+    void onSocketDisconnected();
+    void onSocketError(QAbstractSocket::SocketError);
     void onTextReceived(QString data);
+    void onSocketDestroyed(QObject *obj = nullptr);
 
 };
 

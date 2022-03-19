@@ -22,5 +22,11 @@ private slots:
 private:
     Ui::MainWindow *ui;
     VideoSDK *m_sdk;
+
+public slots:
+    void on_start();
+    void on_stop();
+    void on_error(QString text);
+
 };
 #endif // MAINWINDOW_H
