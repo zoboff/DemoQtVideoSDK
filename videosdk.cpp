@@ -36,6 +36,42 @@ void VideoSDK::open(const QString &host, const QString &pin)
     m_timer.start(QUEUE_INTERVAL);
 }
 
+/* Connect to TrueConf Server
+
+Parameters
+----------
+    server: str
+        Server address. For example, IP address;
+    port: int
+        Port. Default port is 4307.
+*/
+void VideoSDK::connectToServer(const QString &server, const int port)
+{
+    /* {"method": "connectToServer", "server": server, "port": port} */
+    QString command = "{\"method\": \"connectToServer\", \"server\": \"" + server + "\", \"port\": " + QString::number(port) + "}";
+    send_command(command);
+}
+
+/*
+ * Login user to TrueConf Server
+*/
+void VideoSDK::login(const QString &callId, const QString &password)
+{
+    /* command = {"method": "login", "login": callId, "password": password, "encryptPassword": True} */
+    QString command = "{\"method\": \"login\", \"login\": \"" + callId + "\", \"password\": \"" + password+ "\", \"encryptPassword\": True}";
+    send_command(command);
+}
+
+/*
+ * Make a call
+*/
+void VideoSDK::call(const QString &peerId)
+{
+    /* command = {"method": "call", "peerId": peerId} */
+    QString command = "{\"method\": \"call\", \"peerId\": \"" + peerId +"\"}";
+    send_command(command);
+}
+
 void VideoSDK::onSocketConnected()
 {
     qDebug() << "WebSocket '" + m_socket->origin() + "' connected" << endl;
@@ -59,13 +95,15 @@ void VideoSDK::onSocketDisconnected()
     m_socket = nullptr;
 }
 
-void VideoSDK::onSocketError(QAbstractSocket::SocketError)
+void VideoSDK::onSocketError(QAbstractSocket::SocketError err)
 {
     /* Emit signal */
     if(m_socket)
         emit error(m_socket->errorString());
+    else if(err == QAbstractSocket::SocketError::ConnectionRefusedError)
+        emit error("Connection Refused Error");
     else
-        emit error("WebSocket already closed");
+        emit error("WebSocket closed. Error: " + QString::number(err));
 }
 
 void VideoSDK::auth()
@@ -82,10 +120,10 @@ void VideoSDK::processIncoming(const QString &data)
     QJsonObject json_obj = json_doc.object();
 
     /* { "method": ..., "result": ... }; */
-    if(err.error == QJsonParseError::NoError && json_obj.contains(OBJ_METHOD) && json_obj.contains(OBJ_RESULT))
+    if(err.error == QJsonParseError::NoError && json_obj.contains(OBJ_METHOD))
     {
         /* { "method": "auth", "result": true }; */
-        if(json_obj[OBJ_METHOD] == V_AUTH && json_obj[OBJ_RESULT] == true)
+        if(json_obj[OBJ_METHOD] == V_AUTH && json_obj.contains(OBJ_RESULT) && json_obj[OBJ_RESULT].toBool() == true)
         {
             m_started = true;
 
@@ -96,9 +134,22 @@ void VideoSDK::processIncoming(const QString &data)
             now_ready();
         }
         /* {"event": "appStateChanged", "appState": None} */
-        else if()
+        /* "{"method":"event","event":"appStateChanged","embeddedHttpPort":8766,"appState":4,"desktopSharing":{"running":false},"broadcastPicture":{"running":false},"audioCaptureTest":false}" */
+        else if(json_obj.contains(OBJ_EVENT) && json_obj[OBJ_EVENT].toString() == V_APP_STATE_CHANGED
+                && json_obj.contains(OBJ_APP_STATE))
         {
+            int m_state = json_obj[OBJ_APP_STATE].toInt(0);
 
+            /* Emit signal */
+            emit change_state(State(m_state));
+        }
+        /* {"method":"getAppState","requestId":"","embeddedHttpPort":8766,"appState":3,"desktopSharing":{"running":false},"broadcastPicture":{"running":false},"audioCaptureTest":false,"result":true} */
+        else if(json_obj[OBJ_METHOD].toString() == V_GET_APP_STATE && json_obj.contains(OBJ_APP_STATE))
+        {
+            int m_state = json_obj[OBJ_APP_STATE].toInt(0);
+
+            /* Emit signal */
+            emit change_state(State(m_state));
         }
         /* === ERROR ============================================= */
         /* { "error": ... } */
@@ -116,7 +167,7 @@ void VideoSDK::processIncoming(const QString &data)
     /* === ERROR ============================================= */
     else if(err.error != QJsonParseError::NoError)
     {
-        QString err = "processIncoming(): JSON parse error";
+        QString err = "processIncoming(): JSON parse 0error";
 
         /* Emit signal */
         emit error(QString(err));

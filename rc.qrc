@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>rc/article_18dp.png</file>
+        <file>rc/pan_tool_18dp.png</file>
+        <file>rc/article_red_18dp.png</file>
+    </qresource>
+    <qresource prefix="/"/>
+</RCC>

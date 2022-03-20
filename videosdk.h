@@ -22,9 +22,12 @@
 #define OBJ_RESULT "result"
 #define OBJ_CREDENTIALS "credentials"
 #define OBJ_tokenForHttpServer "tokenForHttpServer"
+#define OBJ_APP_STATE "appState"
 
 #define V_AUTH "auth"
 #define V_SECURED "secured"
+#define V_GET_APP_STATE "getAppState"
+#define V_APP_STATE_CHANGED "appStateChanged"
 
 enum State
 {
@@ -46,14 +49,17 @@ class VideoSDK : public QObject
     Q_OBJECT
 
 public:
-
-
-public:
     explicit VideoSDK(QObject *parent);
     ~VideoSDK();
-    void open(const QString &host, const QString &pin);
 
+public:
     bool started() const;
+
+public:
+    void open(const QString &host, const QString &pin);
+    void connectToServer(const QString& server, const int port = 4307);
+    void login(const QString& callId, const QString& password);
+    void call(const QString &peerId);
 
 protected:
     void send_command(const QString &data);
@@ -74,7 +80,7 @@ signals:
     void opened();
     void closed();
     void error(QString text);
-    //void change_state(State state);
+    void change_state(State state);
 
 private:
     QMutex m_mutex;
@@ -85,11 +91,12 @@ private:
     SocketData m_SocketData;
     QList<QString*> m_queue;
     QTimer m_timer;
+    State m_state = State(0);
 
 private slots:
     void onSocketConnected();
     void onSocketDisconnected();
-    void onSocketError(QAbstractSocket::SocketError);
+    void onSocketError(QAbstractSocket::SocketError err);
     void onTextReceived(const QString data);
     void onSocketDestroyed(QObject *obj = nullptr);
     /* For QTimer::quit signal */

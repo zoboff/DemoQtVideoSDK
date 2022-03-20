@@ -16,8 +16,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void updateInterfaceForState(const State& state);
+
 private slots:
-    void on_ConnectButton_clicked();
+    void on_openButton_clicked();
+    void on_conect_loginButton_clicked();
+    void on_callButton_clicked();
+
+    void on_connectButton_clicked();
+
+    void on_loginButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -27,6 +35,7 @@ public slots:
     void on_start();
     void on_stop();
     void on_error(QString text);
+    void on_change_state(const State& state);
 
 };
 #endif // MAINWINDOW_H
