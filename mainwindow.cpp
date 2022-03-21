@@ -14,8 +14,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_sdk, SIGNAL(error(QString)), this, SLOT(on_error(QString)));
     connect(m_sdk, SIGNAL(change_state(State)), this, SLOT(on_change_state(State)));
 
+    /* Disable buttons */
     ui->connectButton->setEnabled(false);
     ui->callButton->setEnabled(false);
+    ui->loginButton->setEnabled(false);
+    ui->logoutButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -72,7 +75,10 @@ void MainWindow::updateInterfaceForState(const State &state)
             ui->stateLabel->setStyleSheet("QLabel { background-color : gray; color : black; }");
     }
 
+    /* Enable/Disable buttons */
     ui->callButton->setEnabled(state == State::normal);
+    ui->loginButton->setEnabled(state == State::login);
+    ui->logoutButton->setEnabled(state == State::normal || state == State::wait || state == State::conference);
 }
 
 void MainWindow::on_start()
@@ -129,4 +135,9 @@ void MainWindow::on_connectButton_clicked()
 void MainWindow::on_loginButton_clicked()
 {
     m_sdk->login(ui->edLogin->text(), ui->edPassword->text());
+}
+
+void MainWindow::on_logoutButton_clicked()
+{
+    m_sdk->logout();
 }

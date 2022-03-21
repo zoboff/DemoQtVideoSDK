@@ -67,8 +67,18 @@ void VideoSDK::connectToService()
 */
 void VideoSDK::login(const QString &callId, const QString &password)
 {
-    /* command = {"method": "login", "login": callId, "password": password, "encryptPassword": True} */
-    QString command = "{\"method\": \"login\", \"login\": \"" + callId + "\", \"password\": \"" + password+ "\", \"encryptPassword\": True}";
+    /* command = {"method": "login", "login": callId, "password": password, "encryptPassword": true} */
+    QString command = "{\"method\": \"login\", \"login\": \"" + callId + "\", \"password\": \"" + password+ "\", \"encryptPassword\": true}";
+    send_command(command);
+}
+
+/*
+ * Logout current user
+*/
+void VideoSDK::logout()
+{
+    /* command = {"method": "logout"} */
+    QString command = "{\"method\": \"logout\"}";
     send_command(command);
 }
 

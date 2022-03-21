@@ -203,6 +203,43 @@
                     <height>16</height>
                    </rect>
                   </property>
+                  <property name="palette">
+                   <palette>
+                    <active>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>85</green>
+                        <blue>255</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </active>
+                    <inactive>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>85</green>
+                        <blue>255</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </inactive>
+                    <disabled>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>120</red>
+                        <green>120</green>
+                        <blue>120</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </disabled>
+                   </palette>
+                  </property>
                   <property name="font">
                    <font>
                     <italic>false</italic>
@@ -213,6 +250,9 @@
                   </property>
                   <property name="textFormat">
                    <enum>Qt::AutoText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </widget>
@@ -284,7 +324,11 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="edPassword"/>
+                    <widget class="QLineEdit" name="edPassword">
+                     <property name="text">
+                      <string>password</string>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </widget>

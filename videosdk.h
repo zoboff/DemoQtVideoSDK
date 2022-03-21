@@ -60,6 +60,7 @@ public:
     void connectToServer(const QString& server, const int port = 4307);
     void connectToService();
     void login(const QString& callId, const QString& password);
+    void logout();
     void call(const QString &peerId);
 
 protected:

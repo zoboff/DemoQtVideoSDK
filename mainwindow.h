@@ -24,6 +24,8 @@ private slots:
     void on_connectButton_clicked();
     void on_loginButton_clicked();
 
+    void on_logoutButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoSDK *m_sdk;
