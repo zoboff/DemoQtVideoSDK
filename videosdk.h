@@ -58,6 +58,7 @@ public:
 public:
     void open(const QString &host, const QString &pin);
     void connectToServer(const QString& server, const int port = 4307);
+    void connectToService();
     void login(const QString& callId, const QString& password);
     void call(const QString &peerId);
 

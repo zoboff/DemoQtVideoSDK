@@ -21,9 +21,7 @@ public:
 private slots:
     void on_openButton_clicked();
     void on_callButton_clicked();
-
     void on_connectButton_clicked();
-
     void on_loginButton_clicked();
 
 private:

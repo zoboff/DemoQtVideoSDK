@@ -53,6 +53,16 @@ void VideoSDK::connectToServer(const QString &server, const int port)
 }
 
 /*
+ * Connect to TrueConf Online service
+*/
+void VideoSDK::connectToService()
+{
+    /* command = {"method": "connectToService"} */
+    QString command = "{\"method\": \"connectToService\"}";
+    send_command(command);
+}
+
+/*
  * Login user to TrueConf Server
 */
 void VideoSDK::login(const QString &callId, const QString &password)

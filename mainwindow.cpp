@@ -119,7 +119,10 @@ void MainWindow::on_callButton_clicked()
 
 void MainWindow::on_connectButton_clicked()
 {
-    m_sdk->connectToServer(ui->edServerIP->text());
+    if(ui->edServerIP->text().length() > 0)
+        m_sdk->connectToServer(ui->edServerIP->text());
+    else
+        m_sdk->connectToService();
 }
 
 
@@ -127,4 +130,3 @@ void MainWindow::on_loginButton_clicked()
 {
     m_sdk->login(ui->edLogin->text(), ui->edPassword->text());
 }
-

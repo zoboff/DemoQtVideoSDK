@@ -194,17 +194,25 @@
                    </item>
                   </layout>
                  </widget>
-                 <widget class="QPushButton" name="disconnectButton">
+                 <widget class="QLabel" name="label_3">
                   <property name="geometry">
                    <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>120</width>
-                    <height>31</height>
+                    <x>20</x>
+                    <y>60</y>
+                    <width>271</width>
+                    <height>16</height>
                    </rect>
                   </property>
+                  <property name="font">
+                   <font>
+                    <italic>false</italic>
+                   </font>
+                  </property>
                   <property name="text">
-                   <string>Disconnect</string>
+                   <string>Connect to TrueConf Online service if empty</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::AutoText</enum>
                   </property>
                  </widget>
                 </widget>
@@ -432,7 +440,7 @@
      <x>0</x>
      <y>0</y>
      <width>977</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
