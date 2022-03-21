@@ -79,14 +79,14 @@ void MainWindow::on_start()
 {
     ui->connectButton->setEnabled(true);
 
-    qDebug() << "Started" << endl;
+    qDebug() << "Started" << Qt::endl;
 }
 
 void MainWindow::on_stop()
 {
     ui->connectButton->setEnabled(false);
 
-    qDebug() << "Stopped" << endl;
+    qDebug() << "Stopped" << Qt::endl;
 }
 
 void MainWindow::on_error(QString text)
@@ -94,7 +94,7 @@ void MainWindow::on_error(QString text)
     QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/pan_tool_18dp.png"), "Error: " + text);
     ui->listWidget->addItem(item);
 
-    qDebug() << "Error: " << text << endl;
+    qDebug() << "Error: " << text << Qt::endl;
 }
 
 void MainWindow::on_change_state(const State& state)
@@ -102,18 +102,12 @@ void MainWindow::on_change_state(const State& state)
     /* Update interface */
     updateInterfaceForState(state);
 
-    qDebug() << "Change state: " << QString::number(state) << endl;
+    qDebug() << "Change state: " << QString::number(state) << Qt::endl;
 }
 
 void MainWindow::on_openButton_clicked()
 {
     m_sdk->open(ui->edIP->text(), ui->edPIN->text());
-}
-
-
-void MainWindow::on_conect_loginButton_clicked()
-{
-
 }
 
 

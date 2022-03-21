@@ -74,7 +74,7 @@ void VideoSDK::call(const QString &peerId)
 
 void VideoSDK::onSocketConnected()
 {
-    qDebug() << "WebSocket '" + m_socket->origin() + "' connected" << endl;
+    qDebug() << "WebSocket '" + m_socket->origin() + "' connected" << Qt::endl;
     QObject::connect(m_socket, SIGNAL(textMessageReceived(QString)), this, SLOT(onTextReceived(QString)));
 
     auth();
@@ -82,7 +82,7 @@ void VideoSDK::onSocketConnected()
 
 void VideoSDK::onSocketDisconnected()
 {
-    qDebug() << "WebSocket '" + m_socket->origin() + "' disconnected" << endl;
+    qDebug() << "WebSocket '" + m_socket->origin() + "' disconnected" << Qt::endl;
 
     if(m_started)
         emit closed();
@@ -220,7 +220,7 @@ void VideoSDK::requestMonitorsInfo()
 */
 void VideoSDK::now_ready()
 {
-    qDebug() << ":now_ready" << endl ;
+    qDebug() << ":now_ready" << Qt::endl ;
     requestAppState();
     requestSettings();
     requestSystemInfo();
@@ -232,8 +232,8 @@ void VideoSDK::now_ready()
 */
 void VideoSDK::now_error(QString &error)
 {
-    qDebug() << ":now_error" << endl;
-    qDebug() << " error: " << error << endl;
+    qDebug() << ":now_error" << Qt::endl;
+    qDebug() << " error: " << error << Qt::endl;
 }
 
 bool VideoSDK::started() const
@@ -248,7 +248,7 @@ void VideoSDK::send_command(const QString &data)
 {
     m_mutex.lock();
     m_queue.append(new QString(data));
-    qDebug() << "Queue length:" << m_queue.length() << endl;
+    qDebug() << "Queue length:" << m_queue.length() << Qt::endl;
     m_mutex.unlock();
 }
 
@@ -256,9 +256,9 @@ int VideoSDK::send(const QString &data)
 {
     int res = m_socket->sendTextMessage(data);
     if(res <= 0)
-        qDebug() << "Send error! " << endl << "Data: " << data << endl;
+        qDebug() << "Send error! " << Qt::endl << "Data: " << data << Qt::endl;
     else
-        qDebug() << "Send Ok: " << data << endl;
+        qDebug() << "Send Ok: " << data << Qt::endl;
 
     return res;
 }
@@ -283,7 +283,7 @@ void VideoSDK::queue_processing()
         {
             /* If the data was successfully sent  */
             m_queue.removeAt(0);
-            qDebug() << "Queue length:" << m_queue.length() << endl;
+            qDebug() << "Queue length:" << m_queue.length() << Qt::endl;
         }
     }
 
@@ -296,7 +296,7 @@ void VideoSDK::queue_processing()
 */
 void VideoSDK::onTextReceived(const QString data)
 {
-    qDebug() << "Message received:" << data << endl;
+    qDebug() << "Message received:" << data << Qt::endl;
 
     // Process
     processIncoming(data);
@@ -307,6 +307,6 @@ void VideoSDK::onTextReceived(const QString data)
 */
 void VideoSDK::onSocketDestroyed(QObject *obj)
 {
-    qDebug() << "WebSocket '" + obj->objectName() + "' distroyed" << endl;
+    qDebug() << "WebSocket '" + obj->objectName() + "' distroyed" << Qt::endl;
 }
 
