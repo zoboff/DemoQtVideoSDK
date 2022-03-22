@@ -66,9 +66,14 @@ public:
     void reject();
     void accept();
     void hangUp(const bool forAll = false);
+    void moveVideoSlotToMonitor(const QString& callId, int monitorIndex);
+    void sendCommand(QString& peerId, QString& cmd);
+    void setPanPos(int pos);
+    void setTiltPos(int pos);
+    void setZoomPos(int pos);
 
 protected:
-    void send_command(const QString &data);
+    void API_send(const QString &data);
     void auth();
     void processIncoming(const QString& data);
     /* Requests */
@@ -76,9 +81,10 @@ protected:
     void requestSettings();
     void requestSystemInfo();
     void requestMonitorsInfo();
+    void requestConferenceParticipants();
 
 private:
-    int send(const QString &data);
+    int API_send_direct(const QString &data);
     void now_ready();
     void now_error(QString &error);
 

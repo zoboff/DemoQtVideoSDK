@@ -49,7 +49,7 @@ void VideoSDK::connectToServer(const QString &server, const int port)
 {
     /* {"method": "connectToServer", "server": server, "port": port} */
     QString command = "{\"method\": \"connectToServer\", \"server\": \"" + server + "\", \"port\": " + QString::number(port) + "}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -59,7 +59,7 @@ void VideoSDK::connectToService()
 {
     /* command = {"method": "connectToService"} */
     QString command = "{\"method\": \"connectToService\"}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -69,7 +69,7 @@ void VideoSDK::login(const QString &callId, const QString &password)
 {
     /* command = {"method": "login", "login": callId, "password": password, "encryptPassword": true} */
     QString command = "{\"method\": \"login\", \"login\": \"" + callId + "\", \"password\": \"" + password+ "\", \"encryptPassword\": true}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -79,7 +79,7 @@ void VideoSDK::logout()
 {
     /* command = {"method": "logout"} */
     QString command = "{\"method\": \"logout\"}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -89,7 +89,7 @@ void VideoSDK::call(const QString &peerId)
 {
     /* command = {"method": "call", "peerId": peerId} */
     QString command = "{\"method\": \"call\", \"peerId\": \"" + peerId +"\"}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -98,7 +98,7 @@ void VideoSDK::call(const QString &peerId)
 void VideoSDK::reject()
 {
     QString command = R"({"method": "accept"})";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -107,7 +107,7 @@ void VideoSDK::reject()
 void VideoSDK::accept()
 {
     QString command = R"({"method": "accept"})";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -122,7 +122,58 @@ void VideoSDK::hangUp(const bool forAll)
     else
         command = R"({"method": "hangUp", "forAll": false})";
 
-    send_command(command);
+    API_send(command);
+}
+
+/*
+ * Move a participant's video to an any other display.
+ * Available in the conference only.
+*/
+void VideoSDK::moveVideoSlotToMonitor(const QString &callId, int monitorIndex)
+{
+    /* command = {"method": "moveVideoSlotToMonitor", "callId": callId, "monitorIndex": monitorIndex} */
+    QString command = "{\"method\": \"moveVideoSlotToMonitor\", \"callId\": \"" + callId + "\", \"monitorIndex\": \"" + QString::number(monitorIndex) + "\"}";
+    API_send(command);
+}
+
+/*
+ * Send a text command to a remote client (application)
+*/
+void VideoSDK::sendCommand(QString &peerId, QString &cmd)
+{
+    /* {"method": "sendCommand", "peerId": peerId, "command": command} */
+    QString command = "\{\"method\": \"sendCommand\", \"peerId\": \"" + peerId + "\", \"command\": \"" + cmd + "\"}";
+    API_send(command);
+}
+
+/*
+ * Set a new position to the active PTS camera
+*/
+void VideoSDK::setPanPos(int pos)
+{
+    /* {"method": "setPanPos", "pos": pos} */
+    QString command = "{\"method\": \"setPanPos\", \"pos\":" + QString::number(pos) + "}";
+    API_send(command);
+}
+
+/*
+ * Set a new position to the active PTS camera
+*/
+void VideoSDK::setTiltPos(int pos)
+{
+    /* {"method": "setPanPos", "pos": pos} */
+    QString command = "{\"method\": \"setTiltPos\", \"pos\":" + QString::number(pos) + "}";
+    API_send(command);
+}
+
+/*
+ * Set a new position to the active PTS camera
+*/
+void VideoSDK::setZoomPos(int pos)
+{
+    /* {"method": "setPanPos", "pos": pos} */
+    QString command = "{\"method\": \"setZoomPos\", \"pos\":" + QString::number(pos) + "}";
+    API_send(command);
 }
 
 void VideoSDK::onSocketConnected()
@@ -163,7 +214,7 @@ void VideoSDK::auth()
 {
     QString command = "{\"method\": \"auth\", \"type\": \"secured\", \"credentials\": \"" + m_pin + "\"}";
     /* Only here send() */
-    send(command);
+    API_send_direct(command);
 }
 
 void VideoSDK::processIncoming(const QString &data)
@@ -238,7 +289,7 @@ void VideoSDK::processIncoming(const QString &data)
 void VideoSDK::requestAppState()
 {
     QString command = "{\"method\": \"getAppState\"}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -247,7 +298,7 @@ void VideoSDK::requestAppState()
 void VideoSDK::requestSettings()
 {
     QString command = "{\"method\": \"getSettings\"}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -256,7 +307,7 @@ void VideoSDK::requestSettings()
 void VideoSDK::requestSystemInfo()
 {
     QString command = "{\"method\": \"getSystemInfo\"}";
-    send_command(command);
+    API_send(command);
 }
 
 /*
@@ -265,7 +316,13 @@ void VideoSDK::requestSystemInfo()
 void VideoSDK::requestMonitorsInfo()
 {
     QString command = "{\"method\": \"getMonitorsInfo\"}";
-    send_command(command);
+    API_send(command);
+}
+
+void VideoSDK::requestConferenceParticipants()
+{
+    QString command = R"({"method": "getConferenceParticipants"})";
+    API_send(command);
 }
 
 /*
@@ -305,14 +362,14 @@ QString VideoSDK::stateToText(const State state)
         case State::wait: return "Pending: either it calls somebody or somebody calls it";
         case State::conference: return "In the conference";
         case State::close: return "Finishing the conference";
-        default: return "Unknown";
+        default: return "Unknown state";
     }
 }
 
 /*
- * Main method to send commands to websocket API
+ * This is the main method to send commands to websocket API
 */
-void VideoSDK::send_command(const QString &data)
+void VideoSDK::API_send(const QString &data)
 {
     m_mutex.lock();
     m_queue.append(new QString(data));
@@ -320,7 +377,7 @@ void VideoSDK::send_command(const QString &data)
     m_mutex.unlock();
 }
 
-int VideoSDK::send(const QString &data)
+int VideoSDK::API_send_direct(const QString &data)
 {
     int res = m_socket->sendTextMessage(data);
     if(res <= 0)
@@ -336,18 +393,23 @@ int VideoSDK::send(const QString &data)
 */
 void VideoSDK::queue_processing()
 {
-    /* --- return --- */
-    if(!started()) return;
-
     /* LOCK */
     m_mutex.lock();
+
+    if(!started())
+    {
+        /* UNLOCK */
+        m_mutex.unlock();
+
+        return;
+    }
 
     if(m_queue.length() > 0)
     {
         QString s {*m_queue[0]};
 
         /* Send data to Video SDK */
-        if(send(s) > 0)
+        if(API_send_direct(s) > 0)
         {
             /* If the data was successfully sent  */
             m_queue.removeAt(0);
