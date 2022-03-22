@@ -62,6 +62,9 @@ public:
     void login(const QString& callId, const QString& password);
     void logout();
     void call(const QString &peerId);
+    void reject();
+    void accept();
+    void hangUp(const bool forAll = false);
 
 protected:
     void send_command(const QString &data);

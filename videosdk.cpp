@@ -92,6 +92,39 @@ void VideoSDK::call(const QString &peerId)
     send_command(command);
 }
 
+/*
+ * Reject an incoming call or invitation to the conference \
+*/
+void VideoSDK::reject()
+{
+    QString command = R"({"method": "accept"})";
+    send_command(command);
+}
+
+/*
+ * Accept an incoming call or invitation to the conference
+*/
+void VideoSDK::accept()
+{
+    QString command = R"({"method": "accept"})";
+    send_command(command);
+}
+
+/*
+ * End a call or a conference
+*/
+void VideoSDK::hangUp(const bool forAll)
+{
+    QString command;
+
+    if(forAll)
+        command = R"({"method": "hangUp", "forAll": true})";
+    else
+        command = R"({"method": "hangUp", "forAll": false})";
+
+    send_command(command);
+}
+
 void VideoSDK::onSocketConnected()
 {
     qDebug() << "WebSocket '" + m_socket->origin() + "' connected" << Qt::endl;

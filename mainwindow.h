@@ -23,8 +23,11 @@ private slots:
     void on_callButton_clicked();
     void on_connectButton_clicked();
     void on_loginButton_clicked();
-
     void on_logoutButton_clicked();
+    void on_acceptButton_clicked();
+    void on_hangupButton_clicked();
+
+    void on_rejectButton_clicked();
 
 private:
     Ui::MainWindow *ui;

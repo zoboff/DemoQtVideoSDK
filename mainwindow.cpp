@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->callButton->setEnabled(false);
     ui->loginButton->setEnabled(false);
     ui->logoutButton->setEnabled(false);
+    ui->acceptButton->setEnabled(false);
+    ui->hangupButton->setEnabled(false);
+    ui->rejectButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -79,6 +82,9 @@ void MainWindow::updateInterfaceForState(const State &state)
     ui->callButton->setEnabled(state == State::normal);
     ui->loginButton->setEnabled(state == State::login);
     ui->logoutButton->setEnabled(state == State::normal || state == State::wait || state == State::conference);
+    ui->acceptButton->setEnabled(state == State::wait);
+    ui->hangupButton->setEnabled(state == State::conference);
+    ui->rejectButton->setEnabled(state == State::wait);
 }
 
 void MainWindow::on_start()
@@ -140,4 +146,19 @@ void MainWindow::on_loginButton_clicked()
 void MainWindow::on_logoutButton_clicked()
 {
     m_sdk->logout();
+}
+
+void MainWindow::on_acceptButton_clicked()
+{
+    m_sdk->accept();
+}
+
+void MainWindow::on_hangupButton_clicked()
+{
+    m_sdk->hangUp();
+}
+
+void MainWindow::on_rejectButton_clicked()
+{
+    m_sdk->reject();
 }

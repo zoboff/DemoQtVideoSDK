@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>977</width>
-    <height>706</height>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,9 +94,9 @@
                  <widget class="QPushButton" name="openButton">
                   <property name="geometry">
                    <rect>
-                    <x>80</x>
+                    <x>19</x>
                     <y>100</y>
-                    <width>220</width>
+                    <width>281</width>
                     <height>25</height>
                    </rect>
                   </property>
@@ -152,9 +152,9 @@
                  <widget class="QPushButton" name="connectButton">
                   <property name="geometry">
                    <rect>
-                    <x>179</x>
+                    <x>18</x>
                     <y>80</y>
-                    <width>120</width>
+                    <width>281</width>
                     <height>31</height>
                    </rect>
                   </property>
@@ -338,7 +338,7 @@
                     <x>179</x>
                     <y>110</y>
                     <width>120</width>
-                    <height>31</height>
+                    <height>30</height>
                    </rect>
                   </property>
                   <property name="text">
@@ -361,52 +361,11 @@
                 </widget>
                </item>
                <item>
-                <widget class="QWidget" name="stateWidget" native="true">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <widget class="QLabel" name="stateLabel">
-                  <property name="geometry">
-                   <rect>
-                    <x>9</x>
-                    <y>4</y>
-                    <width>311</width>
-                    <height>20</height>
-                   </rect>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>160</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="layoutDirection">
-                   <enum>Qt::LeftToRight</enum>
-                  </property>
-                  <property name="text">
-                   <string>&lt;State&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </widget>
-               </item>
-               <item>
                 <widget class="QGroupBox" name="groupBox_3">
                  <property name="maximumSize">
                   <size>
                    <width>16777215</width>
-                   <height>120</height>
+                   <height>190</height>
                   </size>
                  </property>
                  <property name="title">
@@ -415,9 +374,9 @@
                  <widget class="QPushButton" name="callButton">
                   <property name="geometry">
                    <rect>
-                    <x>80</x>
+                    <x>9</x>
                     <y>80</y>
-                    <width>220</width>
+                    <width>291</width>
                     <height>25</height>
                    </rect>
                   </property>
@@ -457,6 +416,45 @@
                    </item>
                   </layout>
                  </widget>
+                 <widget class="QPushButton" name="hangupButton">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>120</y>
+                    <width>120</width>
+                    <height>30</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>HangUp</string>
+                  </property>
+                 </widget>
+                 <widget class="QPushButton" name="acceptButton">
+                  <property name="geometry">
+                   <rect>
+                    <x>180</x>
+                    <y>120</y>
+                    <width>120</width>
+                    <height>30</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>Accept</string>
+                  </property>
+                 </widget>
+                 <widget class="QPushButton" name="rejectButton">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>155</y>
+                    <width>120</width>
+                    <height>30</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>Reject</string>
+                  </property>
+                 </widget>
                 </widget>
                </item>
               </layout>
@@ -474,7 +472,14 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2"/>
+     <widget class="QLabel" name="stateLabel">
+      <property name="text">
+       <string>&lt;Current state&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -487,6 +492,12 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDemo_Video_SDK">
+    <property name="title">
+     <string>Demo Video SDK</string>
+    </property>
+   </widget>
+   <addaction name="menuDemo_Video_SDK"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
