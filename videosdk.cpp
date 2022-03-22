@@ -366,11 +366,11 @@ void VideoSDK::onSocketReceived(const QString data)
 {
     qDebug() << "Message received:" << data << Qt::endl;
 
-    // Process
-    processIncoming(data);
-
     // Emit
     emit socketReceived(data);
+
+    // Process
+    processIncoming(data);
 }
 
 /*
