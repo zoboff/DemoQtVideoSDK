@@ -54,6 +54,7 @@ public:
 
 public:
     bool started() const;
+    static QString stateToText(const State state);
 
 public:
     void open(const QString &host, const QString &pin);
@@ -86,6 +87,7 @@ signals:
     void closed();
     void error(QString text);
     void change_state(State state);
+    void socketReceived(QString data);
 
 private:
     QMutex m_mutex;
@@ -102,7 +104,7 @@ private slots:
     void onSocketConnected();
     void onSocketDisconnected();
     void onSocketError(QAbstractSocket::SocketError err);
-    void onTextReceived(const QString data);
+    void onSocketReceived(const QString data);
     void onSocketDestroyed(QObject *obj = nullptr);
     /* For QTimer::quit signal */
     void queue_processing();

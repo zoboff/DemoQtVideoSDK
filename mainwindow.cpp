@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMetaEnum>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_sdk, SIGNAL(closed()), this, SLOT(on_stop()));
     connect(m_sdk, SIGNAL(error(QString)), this, SLOT(on_error(QString)));
     connect(m_sdk, SIGNAL(change_state(State)), this, SLOT(on_change_state(State)));
+    connect(m_sdk, SIGNAL(socketReceived(QString)), this, SLOT(on_socketReceived(QString)));
 
     /* Disable buttons */
     ui->connectButton->setEnabled(false);
@@ -30,9 +32,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::updateInterfaceForState(const State &state)
+void MainWindow::updateInterfaceForState(const State state)
 {
-    QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/article_18dp.png"), "Change state: " + QString::number(state));
+    QString itemText =  "Change state to " + QString::number(state) + ": " + VideoSDK::stateToText(state);
+    QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/article_18dp.png"), itemText);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
     ui->listWidget->addItem(item);
 
     switch(state)
@@ -109,12 +113,19 @@ void MainWindow::on_error(QString text)
     qDebug() << "Error: " << text << Qt::endl;
 }
 
-void MainWindow::on_change_state(const State& state)
+void MainWindow::on_change_state(const State state)
 {
     /* Update interface */
     updateInterfaceForState(state);
 
     qDebug() << "Change state: " << QString::number(state) << Qt::endl;
+}
+
+void MainWindow::on_socketReceived(QString data)
+{
+    QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/in_18dp.png"), data);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    ui->listWidget->addItem(item);
 }
 
 void MainWindow::on_openButton_clicked()

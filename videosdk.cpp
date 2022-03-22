@@ -128,7 +128,7 @@ void VideoSDK::hangUp(const bool forAll)
 void VideoSDK::onSocketConnected()
 {
     qDebug() << "WebSocket '" + m_socket->origin() + "' connected" << Qt::endl;
-    QObject::connect(m_socket, SIGNAL(textMessageReceived(QString)), this, SLOT(onTextReceived(QString)));
+    QObject::connect(m_socket, SIGNAL(textMessageReceived(QString)), this, SLOT(onSocketReceived(QString)));
 
     auth();
 }
@@ -294,6 +294,21 @@ bool VideoSDK::started() const
     return m_started;
 }
 
+QString VideoSDK::stateToText(const State state)
+{
+    switch(state)
+    {
+        case State::none: return "No connection to the server and TrueConf Room does nothing";
+        case State::connect: return "Tries to connect to the server";
+        case State::login: return "You need to login";
+        case State::normal: return "Connected to the server and logged in";
+        case State::wait: return "Pending: either it calls somebody or somebody calls it";
+        case State::conference: return "In the conference";
+        case State::close: return "Finishing the conference";
+        default: return "Unknown";
+    }
+}
+
 /*
  * Main method to send commands to websocket API
 */
@@ -347,12 +362,15 @@ void VideoSDK::queue_processing()
 /*
  * Signal textMessageReceived() from QWebSocket* m_socket
 */
-void VideoSDK::onTextReceived(const QString data)
+void VideoSDK::onSocketReceived(const QString data)
 {
     qDebug() << "Message received:" << data << Qt::endl;
 
     // Process
     processIncoming(data);
+
+    // Emit
+    emit socketReceived(data);
 }
 
 /*
