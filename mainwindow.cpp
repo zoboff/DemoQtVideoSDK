@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMetaEnum>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,9 +14,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_sdk, SIGNAL(closed()), this, SLOT(on_stop()));
     connect(m_sdk, SIGNAL(error(QString)), this, SLOT(on_error(QString)));
     connect(m_sdk, SIGNAL(change_state(State)), this, SLOT(on_change_state(State)));
+    connect(m_sdk, SIGNAL(socketReceived(QString)), this, SLOT(on_socketReceived(QString)));
 
+    /* Disable buttons */
     ui->connectButton->setEnabled(false);
     ui->callButton->setEnabled(false);
+    ui->loginButton->setEnabled(false);
+    ui->logoutButton->setEnabled(false);
+    ui->acceptButton->setEnabled(false);
+    ui->hangupButton->setEnabled(false);
+    ui->rejectButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -24,9 +32,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::updateInterfaceForState(const State &state)
+void MainWindow::updateInterfaceForState(const State state)
 {
-    QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/article_18dp.png"), "Change state: " + QString::number(state));
+    QString itemText =  "Change state to " + QString::number(state) + ": " + VideoSDK::stateToText(state);
+    QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/article_18dp.png"), itemText);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
     ui->listWidget->addItem(item);
 
     switch(state)
@@ -72,21 +82,27 @@ void MainWindow::updateInterfaceForState(const State &state)
             ui->stateLabel->setStyleSheet("QLabel { background-color : gray; color : black; }");
     }
 
+    /* Enable/Disable buttons */
     ui->callButton->setEnabled(state == State::normal);
+    ui->loginButton->setEnabled(state == State::login);
+    ui->logoutButton->setEnabled(state == State::normal || state == State::wait || state == State::conference);
+    ui->acceptButton->setEnabled(state == State::wait);
+    ui->hangupButton->setEnabled(state == State::conference);
+    ui->rejectButton->setEnabled(state == State::wait);
 }
 
 void MainWindow::on_start()
 {
     ui->connectButton->setEnabled(true);
 
-    qDebug() << "Started" << endl;
+    qDebug() << "Started" << Qt::endl;
 }
 
 void MainWindow::on_stop()
 {
     ui->connectButton->setEnabled(false);
 
-    qDebug() << "Stopped" << endl;
+    qDebug() << "Stopped" << Qt::endl;
 }
 
 void MainWindow::on_error(QString text)
@@ -94,26 +110,27 @@ void MainWindow::on_error(QString text)
     QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/pan_tool_18dp.png"), "Error: " + text);
     ui->listWidget->addItem(item);
 
-    qDebug() << "Error: " << text << endl;
+    qDebug() << "Error: " << text << Qt::endl;
 }
 
-void MainWindow::on_change_state(const State& state)
+void MainWindow::on_change_state(const State state)
 {
     /* Update interface */
     updateInterfaceForState(state);
 
-    qDebug() << "Change state: " << QString::number(state) << endl;
+    qDebug() << "Change state: " << QString::number(state) << Qt::endl;
+}
+
+void MainWindow::on_socketReceived(QString data)
+{
+    QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/in_18dp.png"), data);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    ui->listWidget->addItem(item);
 }
 
 void MainWindow::on_openButton_clicked()
 {
     m_sdk->open_session(ui->edIP->text(), ui->edPIN->text());
-}
-
-
-void MainWindow::on_conect_loginButton_clicked()
-{
-
 }
 
 
@@ -125,7 +142,10 @@ void MainWindow::on_callButton_clicked()
 
 void MainWindow::on_connectButton_clicked()
 {
-    m_sdk->connectToServer(ui->edServerIP->text());
+    if(ui->edServerIP->text().length() > 0)
+        m_sdk->connectToServer(ui->edServerIP->text());
+    else
+        m_sdk->connectToService();
 }
 
 
@@ -134,3 +154,22 @@ void MainWindow::on_loginButton_clicked()
     m_sdk->login(ui->edLogin->text(), ui->edPassword->text());
 }
 
+void MainWindow::on_logoutButton_clicked()
+{
+    m_sdk->logout();
+}
+
+void MainWindow::on_acceptButton_clicked()
+{
+    m_sdk->accept();
+}
+
+void MainWindow::on_hangupButton_clicked()
+{
+    m_sdk->hangUp();
+}
+
+void MainWindow::on_rejectButton_clicked()
+{
+    m_sdk->reject();
+}

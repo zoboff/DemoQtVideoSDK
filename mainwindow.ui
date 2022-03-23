@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>977</width>
-    <height>706</height>
+    <width>992</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,16 +23,6 @@
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QListWidget" name="listWidget">
-              <property name="iconSize">
-               <size>
-                <width>18</width>
-                <height>18</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QWidget" name="widget" native="true">
               <property name="minimumSize">
@@ -94,9 +84,9 @@
                  <widget class="QPushButton" name="openButton">
                   <property name="geometry">
                    <rect>
-                    <x>80</x>
+                    <x>19</x>
                     <y>100</y>
-                    <width>220</width>
+                    <width>281</width>
                     <height>25</height>
                    </rect>
                   </property>
@@ -152,9 +142,9 @@
                  <widget class="QPushButton" name="connectButton">
                   <property name="geometry">
                    <rect>
-                    <x>179</x>
+                    <x>18</x>
                     <y>80</y>
-                    <width>120</width>
+                    <width>281</width>
                     <height>31</height>
                    </rect>
                   </property>
@@ -194,17 +184,65 @@
                    </item>
                   </layout>
                  </widget>
-                 <widget class="QPushButton" name="disconnectButton">
+                 <widget class="QLabel" name="label_3">
                   <property name="geometry">
                    <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>120</width>
-                    <height>31</height>
+                    <x>20</x>
+                    <y>60</y>
+                    <width>271</width>
+                    <height>16</height>
                    </rect>
                   </property>
+                  <property name="palette">
+                   <palette>
+                    <active>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>85</green>
+                        <blue>255</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </active>
+                    <inactive>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>85</green>
+                        <blue>255</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </inactive>
+                    <disabled>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>120</red>
+                        <green>120</green>
+                        <blue>120</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </disabled>
+                   </palette>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <italic>false</italic>
+                   </font>
+                  </property>
                   <property name="text">
-                   <string>Disconnect</string>
+                   <string>Connect to TrueConf Online service if empty</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::AutoText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </widget>
@@ -276,7 +314,11 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="edPassword"/>
+                    <widget class="QLineEdit" name="edPassword">
+                     <property name="text">
+                      <string>password</string>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </widget>
@@ -286,7 +328,7 @@
                     <x>179</x>
                     <y>110</y>
                     <width>120</width>
-                    <height>31</height>
+                    <height>30</height>
                    </rect>
                   </property>
                   <property name="text">
@@ -309,52 +351,11 @@
                 </widget>
                </item>
                <item>
-                <widget class="QWidget" name="stateWidget" native="true">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <widget class="QLabel" name="stateLabel">
-                  <property name="geometry">
-                   <rect>
-                    <x>9</x>
-                    <y>4</y>
-                    <width>311</width>
-                    <height>20</height>
-                   </rect>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>160</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="layoutDirection">
-                   <enum>Qt::LeftToRight</enum>
-                  </property>
-                  <property name="text">
-                   <string>&lt;State&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </widget>
-               </item>
-               <item>
                 <widget class="QGroupBox" name="groupBox_3">
                  <property name="maximumSize">
                   <size>
                    <width>16777215</width>
-                   <height>120</height>
+                   <height>190</height>
                   </size>
                  </property>
                  <property name="title">
@@ -363,9 +364,9 @@
                  <widget class="QPushButton" name="callButton">
                   <property name="geometry">
                    <rect>
-                    <x>80</x>
+                    <x>9</x>
                     <y>80</y>
-                    <width>220</width>
+                    <width>291</width>
                     <height>25</height>
                    </rect>
                   </property>
@@ -405,13 +406,94 @@
                    </item>
                   </layout>
                  </widget>
+                 <widget class="QPushButton" name="hangupButton">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>120</y>
+                    <width>120</width>
+                    <height>30</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>HangUp</string>
+                  </property>
+                 </widget>
+                 <widget class="QPushButton" name="acceptButton">
+                  <property name="geometry">
+                   <rect>
+                    <x>180</x>
+                    <y>120</y>
+                    <width>120</width>
+                    <height>30</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>Accept</string>
+                  </property>
+                 </widget>
+                 <widget class="QPushButton" name="rejectButton">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>155</y>
+                    <width>120</width>
+                    <height>30</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>Reject</string>
+                  </property>
+                 </widget>
                 </widget>
                </item>
               </layout>
              </widget>
             </item>
             <item>
-             <layout class="QFormLayout" name="formLayout"/>
+             <layout class="QFormLayout" name="formLayout">
+              <item row="0" column="1">
+               <widget class="QGroupBox" name="groupBox_5">
+                <property name="title">
+                 <string>Log: Incoming data from App to our WebSocket</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_2">
+                   <item>
+                    <widget class="QListWidget" name="listWidget">
+                     <property name="editTriggers">
+                      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>18</width>
+                       <height>18</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="stateLabel">
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>&lt;State&gt;</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -421,9 +503,6 @@
       </item>
      </layout>
     </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -431,16 +510,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>977</width>
-     <height>22</height>
+     <width>992</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <tabstops>
-  <tabstop>listWidget</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>
