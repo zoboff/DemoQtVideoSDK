@@ -107,7 +107,7 @@ void MainWindow::on_change_state(const State& state)
 
 void MainWindow::on_openButton_clicked()
 {
-    m_sdk->open(ui->edIP->text(), ui->edPIN->text());
+    m_sdk->open_session(ui->edIP->text(), ui->edPIN->text());
 }
 
 

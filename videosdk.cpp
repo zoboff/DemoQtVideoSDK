@@ -3,23 +3,7 @@
 
 VideoSDK::VideoSDK(QObject *parent): QObject(parent)
 {
-    QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(queue_processing()));
-}
-
-VideoSDK::~VideoSDK()
-{
-    if(m_socket)
-        m_socket->close();
-}
-
-void VideoSDK::open(const QString &host, const QString &pin)
-{
-    m_host = host;
-    m_pin = pin;
-
-    if(m_socket)
-        m_socket->close();
-
+    /* Create & init the QWebSocket */
     QString name = "VideoSDK to API websocket " + QString::number(QRandomGenerator::global()->generate());
     m_socket = new QWebSocket(name, QWebSocketProtocol::VersionLatest, this);
     m_socket->setObjectName(name);
@@ -29,11 +13,32 @@ void VideoSDK::open(const QString &host, const QString &pin)
     QObject::connect(m_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onSocketError(QAbstractSocket::SocketError)));
     QObject::connect(m_socket, SIGNAL(destroyed(QObject*)), this, SLOT(onSocketDestroyed(QObject*)));
 
+    /* Queue processing timer  */
+    QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(queue_processing()));
+}
+
+VideoSDK::~VideoSDK()
+{
+    close_session();
+    delete m_socket;
+}
+
+void VideoSDK::open_session(const QString &host, const QString &pin)
+{
+    m_host = host;
+    m_pin = pin;
+
     QUrl url = QUrl("ws://" + host + ":8765");
     m_socket->open(url);
 
     /* Start a send texts processing */
     m_timer.start(QUEUE_INTERVAL);
+}
+
+void VideoSDK::close_session()
+{
+    m_socket->close();
+    clear_queue();
 }
 
 /* Connect to TrueConf Server
@@ -133,16 +138,6 @@ void VideoSDK::processIncoming(const QString &data)
             /* Now */
             now_ready();
         }
-        /* {"event": "appStateChanged", "appState": None} */
-        /* "{"method":"event","event":"appStateChanged","embeddedHttpPort":8766,"appState":4,"desktopSharing":{"running":false},"broadcastPicture":{"running":false},"audioCaptureTest":false}" */
-        else if(json_obj.contains(OBJ_EVENT) && json_obj[OBJ_EVENT].toString() == V_APP_STATE_CHANGED
-                && json_obj.contains(OBJ_APP_STATE))
-        {
-            int m_state = json_obj[OBJ_APP_STATE].toInt(0);
-
-            /* Emit signal */
-            emit change_state(State(m_state));
-        }
         /* {"method":"getAppState","requestId":"","embeddedHttpPort":8766,"appState":3,"desktopSharing":{"running":false},"broadcastPicture":{"running":false},"audioCaptureTest":false,"result":true} */
         else if(json_obj[OBJ_METHOD].toString() == V_GET_APP_STATE && json_obj.contains(OBJ_APP_STATE))
         {
@@ -150,6 +145,12 @@ void VideoSDK::processIncoming(const QString &data)
 
             /* Emit signal */
             emit change_state(State(m_state));
+        }
+        /* {"method":"event", "event": ..., ...}" */
+        else if(json_obj.contains(OBJ_METHOD) && json_obj.contains(OBJ_EVENT)
+                && json_obj[OBJ_METHOD].toString() == OBJ_EVENT)
+        {
+            processIncomingEvent(json_obj[OBJ_EVENT].toString(), json_obj);
         }
         /* === ERROR ============================================= */
         /* { "error": ... } */
@@ -177,6 +178,23 @@ void VideoSDK::processIncoming(const QString &data)
     }
 
     // auto j = {"appState": None, "method": "getAppState", "result": None};
+}
+
+void VideoSDK::processIncomingEvent(const QString &event, const QJsonObject &json_obj)
+{
+    /* {"event": "appStateChanged", "appState": None} */
+    if(event == V_APP_STATE_CHANGED && json_obj.contains(OBJ_APP_STATE))
+    {
+        int m_state = json_obj[OBJ_APP_STATE].toInt(0);
+
+        /* Emit signal */
+        emit change_state(State(m_state));
+    }
+    else
+    {
+
+    }
+
 }
 
 /*
@@ -249,6 +267,14 @@ void VideoSDK::send_command(const QString &data)
     m_mutex.lock();
     m_queue.append(new QString(data));
     qDebug() << "Queue length:" << m_queue.length() << endl;
+    m_mutex.unlock();
+}
+
+void VideoSDK::clear_queue()
+{
+    m_mutex.lock();
+    m_queue.clear();
+    qDebug() << "Clear queue" << endl;
     m_mutex.unlock();
 }
 

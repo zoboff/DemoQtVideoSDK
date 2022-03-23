@@ -56,15 +56,18 @@ public:
     bool started() const;
 
 public:
-    void open(const QString &host, const QString &pin);
+    void open_session(const QString &host, const QString &pin);
+    void close_session();
     void connectToServer(const QString& server, const int port = 4307);
     void login(const QString& callId, const QString& password);
     void call(const QString &peerId);
 
 protected:
     void send_command(const QString &data);
+    void clear_queue();
     void auth();
     void processIncoming(const QString& data);
+    void processIncomingEvent(const QString &event, const QJsonObject &json_obj);
     /* Requests */
     void requestAppState();
     void requestSettings();
