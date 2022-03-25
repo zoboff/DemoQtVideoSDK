@@ -24,10 +24,17 @@
 #define OBJ_tokenForHttpServer "tokenForHttpServer"
 #define OBJ_APP_STATE "appState"
 
+#define OBJ_authInfo "authInfo"
+#define OBJ_peerId "peerId"
+#define OBJ_peerDn "peerDn"
+
 #define V_AUTH "auth"
 #define V_SECURED "secured"
 #define V_GET_APP_STATE "getAppState"
 #define V_APP_STATE_CHANGED "appStateChanged"
+
+#define METHOD_getSystemInfo "getSystemInfo"
+
 
 enum State
 {
@@ -42,6 +49,8 @@ enum State
 
 typedef struct SocketData {
     QString tokenForHttpServer;
+    QString peerId;
+    QString peerDn;
 } SocketData;
 
 class VideoSDK : public QObject
@@ -80,6 +89,7 @@ protected:
     void auth();
     void processIncoming(const QString& data);
     void processIncomingEvent(const QString &event, const QJsonObject &json_obj);
+    void processIncomingMethodResponse(const QString &method, const QJsonObject &json_obj);
     /* Requests */
     void requestAppState();
     void requestSettings();
@@ -90,7 +100,7 @@ protected:
 private:
     int API_send_direct(const QString &data);
     void now_ready();
-    void now_error(QString &error);
+    void now_error(QString error);
 
 signals:
     void opened();

@@ -208,11 +208,11 @@ void VideoSDK::onSocketError(QAbstractSocket::SocketError err)
 {
     /* Emit signal */
     if(m_socket)
-        emit error(m_socket->errorString());
+        now_error(m_socket->errorString());
     else if(err == QAbstractSocket::SocketError::ConnectionRefusedError)
-        emit error("Connection Refused Error");
+        now_error("Connection Refused Error");
     else
-        emit error("WebSocket closed. Error: " + QString::number(err));
+        now_error("WebSocket closed. Error: " + QString::number(err));
 }
 
 void VideoSDK::auth()
@@ -231,7 +231,9 @@ void VideoSDK::processIncoming(const QString &data)
     /* { "method": ..., "result": ... }; */
     if(err.error == QJsonParseError::NoError && json_obj.contains(OBJ_METHOD))
     {
+        /* ======================================================= */
         /* { "method": "auth", "result": true }; */
+        /* ======================================================= */
         if(json_obj[OBJ_METHOD] == V_AUTH && json_obj.contains(OBJ_RESULT) && json_obj[OBJ_RESULT].toBool() == true)
         {
             m_started = true;
@@ -242,7 +244,9 @@ void VideoSDK::processIncoming(const QString &data)
             /* Now */
             now_ready();
         }
+        /* ======================================================= */
         /* {"method":"getAppState","requestId":"","embeddedHttpPort":8766,"appState":3,"desktopSharing":{"running":false},"broadcastPicture":{"running":false},"audioCaptureTest":false,"result":true} */
+        /* ======================================================= */
         else if(json_obj[OBJ_METHOD].toString() == V_GET_APP_STATE && json_obj.contains(OBJ_APP_STATE))
         {
             int m_state = json_obj[OBJ_APP_STATE].toInt(0);
@@ -250,7 +254,16 @@ void VideoSDK::processIncoming(const QString &data)
             /* Emit signal */
             emit change_state(State(m_state));
         }
+        /* ======================================================= */
+        /* {"method": ..., "requestId": ...} */
+        /* ======================================================= */
+        else if(json_obj.contains(OBJ_METHOD) && json_obj.contains(OBJ_REQUEST_ID))
+        {
+            processIncomingMethodResponse(json_obj[OBJ_METHOD].toString(), json_obj);
+        }
+        /* ======================================================= */
         /* {"method":"event", "event": ..., ...}" */
+        /* ======================================================= */
         else if(json_obj.contains(OBJ_METHOD) && json_obj.contains(OBJ_EVENT)
                 && json_obj[OBJ_METHOD].toString() == OBJ_EVENT)
         {
@@ -258,12 +271,10 @@ void VideoSDK::processIncoming(const QString &data)
         }
         /* === ERROR ============================================= */
         /* { "error": ... } */
+        /* ======================================================= */
         else if(json_obj.contains(OBJ_ERROR))
         {
             QString err = QString(json_obj[OBJ_ERROR].toString());
-
-            /* Emit signal */
-            emit error(QString(err));
 
             /* Now */
             now_error(err);
@@ -273,9 +284,6 @@ void VideoSDK::processIncoming(const QString &data)
     else if(err.error != QJsonParseError::NoError)
     {
         QString err = "processIncoming(): JSON parse 0error";
-
-        /* Emit signal */
-        emit error(QString(err));
 
         /* Now */
         now_error(err);
@@ -301,6 +309,36 @@ void VideoSDK::processIncomingEvent(const QString &event, const QJsonObject &jso
 
 }
 
+void VideoSDK::processIncomingMethodResponse(const QString &method, const QJsonObject &json_obj)
+{
+    /* getSystemInfo */
+    if(method == METHOD_getSystemInfo)
+    {
+        if(json_obj.contains(OBJ_authInfo))
+        {
+            try
+            {
+                QJsonObject auth_obj = json_obj[OBJ_authInfo].toObject();
+
+                m_SocketData.peerId = auth_obj[OBJ_peerId].toString();
+                m_SocketData.peerDn = auth_obj[OBJ_peerDn].toString();
+            }
+            catch(...) {
+                QString err = METHOD_getSystemInfo + QString(" response: invalid object ") + OBJ_authInfo;
+
+                /* Now */
+                now_error(err);
+            }
+        }
+        else {
+            QString err = METHOD_getSystemInfo + QString(" response: missing container ") + OBJ_authInfo;
+
+            /* Now */
+            now_error(err);
+        }
+    }
+}
+
 /*
  * Request an application state
 */
@@ -324,7 +362,8 @@ void VideoSDK::requestSettings()
 */
 void VideoSDK::requestSystemInfo()
 {
-    QString command = "{\"method\": \"getSystemInfo\"}";
+    /* {"method": "getSystemInfo"} */
+    QString command = "{\"method\": \"" + QString(METHOD_getSystemInfo) + "\"}";
     API_send(command);
 }
 
@@ -358,10 +397,13 @@ void VideoSDK::now_ready()
 /*
  * When error
 */
-void VideoSDK::now_error(QString &error)
+void VideoSDK::now_error(QString err)
 {
     qDebug() << ":now_error" << Qt::endl;
-    qDebug() << " error: " << error << Qt::endl;
+    qDebug() << " error: " << err << Qt::endl;
+
+    /* Emit signal */
+    emit error(err);
 }
 
 bool VideoSDK::started() const
