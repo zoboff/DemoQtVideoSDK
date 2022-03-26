@@ -95,14 +95,14 @@ void MainWindow::on_start()
 {
     ui->connectButton->setEnabled(true);
 
-    qDebug() << "Started" << Qt::endl;
+    qDebug() << "Started" << endl;
 }
 
 void MainWindow::on_stop()
 {
     ui->connectButton->setEnabled(false);
 
-    qDebug() << "Stopped" << Qt::endl;
+    qDebug() << "Stopped" << endl;
 }
 
 void MainWindow::on_error(QString text)
@@ -110,7 +110,7 @@ void MainWindow::on_error(QString text)
     QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/pan_tool_18dp.png"), "Error: " + text);
     ui->listWidget->addItem(item);
 
-    qDebug() << "Error: " << text << Qt::endl;
+    qDebug() << "Error: " << text << endl;
 }
 
 void MainWindow::on_change_state(const State state)
@@ -118,7 +118,7 @@ void MainWindow::on_change_state(const State state)
     /* Update interface */
     updateInterfaceForState(state);
 
-    qDebug() << "Change state: " << QString::number(state) << Qt::endl;
+    qDebug() << "Change state: " << QString::number(state) << endl;
 }
 
 void MainWindow::on_socketReceived(QString data)
