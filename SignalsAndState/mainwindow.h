@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "videosdk/videosdk.h"
+#include "../videosdk/videosdk.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
