@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>rc/calling_an.gif</file>
+        <file>rc/calling_an_160.gif</file>
+        <file>rc/ambulance-hospital.gif</file>
+    </qresource>
+</RCC>
