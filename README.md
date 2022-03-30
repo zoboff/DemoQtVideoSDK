@@ -20,3 +20,5 @@ $ trueconf-room -pin "123"
 ![screenshot of the DemoQtVideoSDK main screen](screenshot.png)
 
 ## EmergencyCall
+
+Just an animated calling button on the bottom right corner of the screen
