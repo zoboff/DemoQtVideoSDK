@@ -16,5 +16,7 @@ Linux:
 $ trueconf-room -pin "123"
 ```
 
-## Main screen
+## SignalsAndState
 ![screenshot of the DemoQtVideoSDK main screen](screenshot.png)
+
+## EmergencyCall
