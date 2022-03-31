@@ -2,6 +2,7 @@
 #include "ui_dialog.h"
 #include <QDesktopWidget>
 #include <QMovie>
+#include <QDebug>
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
@@ -28,6 +29,13 @@ Dialog::Dialog(QWidget *parent)
         ui->pushButton->setIcon(movie->currentPixmap());
     });
     movie->start();
+
+    /*  */
+    connect(&m_sdk, &VideoSDK::change_state, [=](State state){
+        m_state = state;
+    });
+
+    m_sdk.open_session("127.0.0.1", "123");
 }
 
 Dialog::~Dialog()
@@ -37,6 +45,5 @@ Dialog::~Dialog()
 
 void Dialog::on_pushButton_clicked()
 {
-    m_sdk.open_session("127.0.0.1", "123");
     m_sdk.call("echotest@trueconf.com");
 }

@@ -22,5 +22,6 @@ private slots:
 private:
     Ui::Dialog *ui;
     VideoSDK m_sdk {this};
+    State m_state;
 };
 #endif // DIALOG_H
