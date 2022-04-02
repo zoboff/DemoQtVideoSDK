@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     EmergencyCall \
-    SignalsAndState
+    SignalsAndState \
+    just_call

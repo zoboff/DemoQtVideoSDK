@@ -35,7 +35,14 @@ Dialog::Dialog(QWidget *parent)
         m_state = state;
     });
 
-    m_sdk.open_session("127.0.0.1", "123");
+    /* When Room or VideoSDK have been started on local machine */
+    QString room_ip = "127.0.0.1";
+    /* Command line:
+       "C:\Program Files\TrueConf\Room\TrueConfRoom.exe" -pin "123"
+    */
+    QString room_pin = "123";
+
+    m_sdk.open_session(room_ip, room_pin);
 }
 
 Dialog::~Dialog()
