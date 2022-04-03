@@ -4,6 +4,7 @@
         <file>rc/pan_tool_18dp.png</file>
         <file>rc/article_red_18dp.png</file>
         <file>rc/in_18dp.png</file>
+        <file>rc/24px.svg</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
