@@ -33,6 +33,10 @@ Dialog::Dialog(QWidget *parent)
     /*  */
     connect(&m_sdk, &VideoSDK::change_state, [=](State state){
         m_state = state;
+        if(m_state == State::conference || m_state == State::wait)
+            m_sdk.changeWindowState(WindowState::maximized, true);
+        else
+            m_sdk.changeWindowState(WindowState::minimized, false);
     });
 
     /* When Room or VideoSDK have been started on local machine */
