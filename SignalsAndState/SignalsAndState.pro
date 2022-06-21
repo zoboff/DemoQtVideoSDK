@@ -18,10 +18,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    ../videosdk/methods.cpp \
     ../videosdk/videosdk.cpp
 
 HEADERS += \
     mainwindow.h \
+    ../videosdk/methods.h \
     ../videosdk/videosdk.h
 
 FORMS += \
