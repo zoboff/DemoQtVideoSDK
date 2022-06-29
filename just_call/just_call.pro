@@ -10,6 +10,7 @@ CONFIG -= app_bundle
 
 SOURCES += \
         ../videosdk/methods.cpp \
+        ../videosdk/events.cpp \
         ../videosdk/videosdk.cpp \
         main.cpp
 
@@ -20,4 +21,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ../videosdk/methods.h \
+    ../videosdk/events.h \
     ../videosdk/videosdk.h

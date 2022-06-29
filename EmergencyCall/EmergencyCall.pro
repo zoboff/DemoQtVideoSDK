@@ -10,12 +10,14 @@ CONFIG += c++11
 
 SOURCES += \
     ../videosdk/methods.cpp \
+    ../videosdk/events.cpp \
     ../videosdk/videosdk.cpp \
     main.cpp \
     dialog.cpp
 
 HEADERS += \
     ../videosdk/methods.h \
+    ../videosdk/events.h \
     ../videosdk/videosdk.h \
     dialog.h
 
