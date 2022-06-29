@@ -19,11 +19,13 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     ../videosdk/methods.cpp \
+    ../videosdk/events.cpp \
     ../videosdk/videosdk.cpp
 
 HEADERS += \
     mainwindow.h \
     ../videosdk/methods.h \
+    ../videosdk/events.h \
     ../videosdk/videosdk.h
 
 FORMS += \
