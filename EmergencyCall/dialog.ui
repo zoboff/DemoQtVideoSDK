@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>197</width>
-    <height>174</height>
+    <width>305</width>
+    <height>268</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,12 +32,12 @@
      </property>
      <property name="icon">
       <iconset resource="rc.qrc">
-       <normaloff>:/rc/calling_an.gif</normaloff>:/rc/calling_an.gif</iconset>
+       <normaloff>:/rc/calling.gif</normaloff>:/rc/calling.gif</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>160</width>
-       <height>133</height>
+       <width>512</width>
+       <height>512</height>
       </size>
      </property>
     </widget>

@@ -24,7 +24,7 @@ Dialog::Dialog(QWidget *parent)
     /* Animated button */
     auto movie = new QMovie(this);
 
-    movie->setFileName(":/rc/ambulance-hospital.gif");
+    movie->setFileName(":/rc/calling.gif");
     connect(movie, &QMovie::frameChanged, [=]{
         ui->pushButton->setIcon(movie->currentPixmap());
     });
@@ -42,7 +42,7 @@ Dialog::Dialog(QWidget *parent)
     /* When Room or VideoSDK have been started on local machine */
     QString room_ip = "127.0.0.1";
 
-    m_sdk.open_session(room_ip);
+    m_sdk.open_session(room_ip, "123");
 }
 
 Dialog::~Dialog()
