@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_sdk, SIGNAL(change_state(State)), this, SLOT(on_change_state(State)));
     connect(m_sdk, SIGNAL(socketReceived(QString)), this, SLOT(on_socketReceived(QString)));
 
+    connect(m_sdk->Events(), SIGNAL(appStateChanged(QJsonObject)), this, SLOT(appStateChanged(QJsonObject)));
+
     /* Disable buttons */
     ui->connectButton->setEnabled(false);
     ui->callButton->setEnabled(false);
@@ -128,6 +130,16 @@ void MainWindow::on_socketReceived(QString data)
     ui->listWidget->addItem(item);
 }
 
+void MainWindow::appStateChanged(const QJsonObject &response)
+{
+    int state = response["appState"].toInt();
+
+    QString itemText =  "NEW Change state to " + QString::number(state);
+    QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/article_18dp.png"), itemText);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    ui->listWidget->addItem(item);
+}
+
 void MainWindow::on_openButton_clicked()
 {
     m_sdk->open_session(ui->edIP->text(), ui->edPIN->text());
@@ -145,7 +157,7 @@ void MainWindow::on_connectButton_clicked()
     if(ui->edServerIP->text().length() > 0)
         m_sdk->connectToServer(ui->edServerIP->text());
     else
-        m_sdk->connectToService();
+        m_sdk->Methods()->connectToService();
 }
 
 

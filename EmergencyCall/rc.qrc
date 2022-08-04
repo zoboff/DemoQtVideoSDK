@@ -3,5 +3,6 @@
         <file>rc/calling_an.gif</file>
         <file>rc/calling_an_160.gif</file>
         <file>rc/ambulance-hospital.gif</file>
+        <file>rc/calling.gif</file>
     </qresource>
 </RCC>
