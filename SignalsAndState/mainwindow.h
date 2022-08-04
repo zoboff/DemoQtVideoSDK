@@ -39,7 +39,7 @@ public slots:
     void on_change_state(const State state);
     void on_socketReceived(QString data);
 
-    void appStateChanged(const QJsonObject &responce);
+    void appStateChanged(const QJsonObject &response);
 
 };
 #endif // MAINWINDOW_H

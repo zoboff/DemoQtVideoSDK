@@ -130,9 +130,9 @@ void MainWindow::on_socketReceived(QString data)
     ui->listWidget->addItem(item);
 }
 
-void MainWindow::appStateChanged(const QJsonObject &responce)
+void MainWindow::appStateChanged(const QJsonObject &response)
 {
-    int state = responce["appState"].toInt();
+    int state = response["appState"].toInt();
 
     QString itemText =  "NEW Change state to " + QString::number(state);
     QListWidgetItem* item = new QListWidgetItem(QIcon(":/images/rc/article_18dp.png"), itemText);
