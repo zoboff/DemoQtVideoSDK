@@ -89,7 +89,7 @@ void MainWindow::updateInterfaceForState(const State state)
     ui->loginButton->setEnabled(state == State::login);
     ui->logoutButton->setEnabled(state == State::normal || state == State::wait || state == State::conference);
     ui->acceptButton->setEnabled(state == State::wait);
-    ui->hangupButton->setEnabled(state == State::conference);
+    ui->hangupButton->setEnabled(state == State::wait || state == State::conference);
     ui->rejectButton->setEnabled(state == State::wait);
 }
 
