@@ -1,3 +1,3 @@
 [submodule "videosdk"]
 	path = videosdk
-	url = https://github.com/zoboff/videosdk.git
+url=https://github.com/trueconf/videosdk.git
