@@ -54,3 +54,5 @@ int main(int argc, char *argv[])
 ## EmergencyCall
 
 Just an animated calling button on the bottom right corner of the screen
+
+![emergency_call](https://user-images.githubusercontent.com/33928051/214836085-8d096b32-51ad-4ffd-ac0b-ad059b9b0666.gif)
